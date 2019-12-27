@@ -1,0 +1,27 @@
+{
+  "name": "users",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "live": "node_modules/nodemon/bin/nodemon.js server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-graphql": "^0.9.0",
+    "graphql": "^14.5.8",
+    "lodash": "^4.17.15"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "nodemon": "^2.0.2",
+    "prettier": "1.19.1"
+  }
+}
