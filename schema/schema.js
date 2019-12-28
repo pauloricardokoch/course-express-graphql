@@ -1,26 +1,47 @@
 const graphql = require("graphql");
-const _ = require("lodash");
+const axios = require("axios");
 
 const {
   GraphQLObjectType,
-  GraphQLString,
   GraphQLID,
+  GraphQLSchema,
+  GraphQLString,
   GraphQLInt,
-  GraphQLSchema
+  GraphQLList
 } = graphql;
-
-const users = [
-  { id: "23", firstName: "Bill", age: 20 },
-  { id: "47", firstName: "Samantha", age: 21 }
-];
 
 const UserType = new GraphQLObjectType({
   name: "User",
-  fields: {
+  fields: () => ({
     id: { type: GraphQLID },
     firstName: { type: GraphQLString },
-    age: { type: GraphQLInt }
-  }
+    age: { type: GraphQLInt },
+    company: {
+      type: CompanyType,
+      resolve: parentValue => {
+        return axios
+          .get(`http://localhost:3000/companies/${parentValue.companyId}`)
+          .then(response => response.data);
+      }
+    }
+  })
+});
+
+const CompanyType = new GraphQLObjectType({
+  name: "Company",
+  fields: () => ({
+    id: { type: GraphQLID },
+    name: { type: GraphQLString },
+    description: { type: GraphQLString },
+    users: {
+      type: new GraphQLList(UserType),
+      resolve: parentValue => {
+        return axios
+          .get(`http://localhost:3000/companies/${parentValue.id}/users`)
+          .then(response => response.data);
+      }
+    }
+  })
 });
 
 const RootQuery = new GraphQLObjectType({
@@ -29,7 +50,20 @@ const RootQuery = new GraphQLObjectType({
     user: {
       type: UserType,
       args: { id: { type: GraphQLID } },
-      resolve: (parentValue, args) => _.find(users, { id: args.id })
+      resolve: (parentValue, args) => {
+        return axios
+          .get(`http://localhost:3000/users/${args.id}`)
+          .then(response => response.data);
+      }
+    },
+    company: {
+      type: CompanyType,
+      args: { id: { type: GraphQLID } },
+      resolve: (parentValue, args) => {
+        return axios
+          .get(`http://localhost:3000/companies/${args.id}`)
+          .then(response => response.data);
+      }
     }
   }
 });
