@@ -1,12 +1,14 @@
 {
   "name": "users",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "live": "nodemon server.js",
-    "json:server": "json-server --watch db.json"
+    "build": "rm -rf dist/*;  babel lib -d dist",
+    "live:build": "nodemon --watch lib -x \"yarn run build\"",
+    "serve": "node dist/index.js",
+    "json:server": "json-server --watch lib/json-server/db.json"
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +21,9 @@
     "lodash": "^4.17.15"
   },
   "devDependencies": {
+    "@babel/cli": "^7.7.7",
+    "@babel/core": "^7.7.7",
+    "@babel/preset-env": "^7.7.7",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.7.0",
